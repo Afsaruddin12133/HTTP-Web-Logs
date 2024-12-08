@@ -14,7 +14,7 @@ public class SimpleHTTPServer {
     }
 
     public void start() {
-        try (ServerSocket serverSocket = new ServerSocket(PORT)) {
+        try (ServerSocket serverSocket = new ServerSocket(PORT, 0, InetAddress.getByName("0.0.0.0"))) {
             System.out.println("Server started on port " + PORT);
 
             while (true) {
@@ -42,7 +42,7 @@ public class SimpleHTTPServer {
 
         long responseTime = System.currentTimeMillis() - startTime;
 
-        // Log each request except /metrics
+
         if (!path.equals("/metrics")) {
             requestLogs.add(new RequestLog(method, responseTime, clientIP));
         }
@@ -50,7 +50,7 @@ public class SimpleHTTPServer {
         String corsHeader = "Access-Control-Allow-Origin: *\r\n";
 
         if (path.equals("/metrics")) {
-            // Calculate metrics for response
+
             JSONObject jsonResponse = generateMetrics();
             String response = "HTTP/1.1 200 OK\r\n" +
                     corsHeader +
